@@ -1,5 +1,7 @@
 # Selenium E2E Automation Portfolio
 
+[![Selenium E2E](https://github.com/faesaliqbal/selenium-java-e2e-portfolio/actions/workflows/selenium.yml/badge.svg?branch=main)](https://github.com/faesaliqbal/selenium-java-e2e-portfolio/actions/workflows/selenium.yml?query=branch%3Amain)
+
 A Java Selenium/TestNG portfolio project that exercises the public [SauceDemo](https://www.saucedemo.com/) shopping application. It demonstrates Page Object Model design, meaningful positive and negative business checks, cross-browser execution, condition-based synchronization, and failure evidence handling.
 
 ## Technology stack
@@ -149,11 +151,18 @@ Generated reports and build output are excluded by `.gitignore`.
 
 ## GitHub Actions
 
-The workflow runs on pushes to `main` and pull requests targeting `main`. Separate Chrome and Firefox matrix jobs use Ubuntu 24.04, Temurin Java 17, Maven dependency caching, and the existing `-Dbrowser` override. Xvfb supplies a display without changing browser configuration or test coverage. Selenium Manager remains responsible for driver resolution. The workflow sets [`SE_SKIP_DRIVER_IN_PATH=true`](https://www.selenium.dev/documentation/selenium_manager/#configuration) so runner-provided driver executables are not selected from PATH.
+The workflow runs on pushes to `main` and pull requests targeting `main`. Separate Chrome and Firefox matrix jobs use Ubuntu 24.04, Temurin Java 17, Maven dependency caching, and the existing `-Dbrowser` override. Xvfb supplies a display. Chrome CI sessions use a 1920×1080 window to avoid the Linux/Xvfb maximization issue; local runs and Firefox retain window maximization. Selenium Manager remains responsible for driver resolution. The workflow sets [`SE_SKIP_DRIVER_IN_PATH=true`](https://www.selenium.dev/documentation/selenium_manager/#configuration) so runner-provided driver executables are not selected from PATH.
 
 Each job runs the complete suite serially and attempts to upload Surefire, TestNG, and Extent evidence even after a test failure. Download and extract the browser-specific artifact to view reports locally; retain the directory structure for screenshot links. Artifact retention is 14 days.
 
-This workflow has been statically validated but has not yet run on GitHub; the recorded passing results above are local browser results.
+The workflow has been validated on GitHub Actions. The [latest verified CI execution](https://github.com/faesaliqbal/selenium-java-e2e-portfolio/actions/runs/36874753548) on 2026-10-01 passed both browser jobs:
+
+| Browser | Passed | Failures | Errors | Skipped |
+| --- | ---: | ---: | ---: | ---: |
+| Chrome | 27/27 | 0 | 0 | 0 |
+| Firefox | 27/27 | 0 | 0 | 0 |
+
+These CI results are separate from the recorded local validation above; the badge reflects the current workflow status on `main`.
 
 ## Practices and limitations
 

@@ -9,6 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -53,7 +54,12 @@ public abstract class BaseTest {
         // A setup failure is captured by the listener, then alwaysRun teardown releases the session.
         driver.manage().timeouts().pageLoadTimeout(pageLoadTimeout);
         driver.manage().timeouts().scriptTimeout(scriptTimeout);
-        driver.manage().window().maximize();
+        if (browser.equals("chrome") && "true".equals(System.getenv("GITHUB_ACTIONS"))) {
+            // Chrome's maximize command can fail under the CI runner's Linux/Xvfb display.
+            driver.manage().window().setSize(new Dimension(1920, 1080));
+        } else {
+            driver.manage().window().maximize();
+        }
     }
 
     @AfterMethod(alwaysRun = true)

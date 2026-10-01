@@ -1,0 +1,50 @@
+name: Selenium E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    name: Selenium (${{ matrix.browser }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, firefox]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Java and Maven cache
+        uses: actions/setup-java@v6.0.1
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+          cache-dependency-path: pom.xml
+
+      - name: Run the complete suite
+        env:
+          SE_SKIP_DRIVER_IN_PATH: 'true'
+        run: xvfb-run -a --server-args="-screen 0 1920x1080x24" mvn --batch-mode --no-transfer-progress "-Dbrowser=${{ matrix.browser }}" test
+
+      - name: Upload test reports and failure evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: selenium-${{ matrix.browser }}-${{ github.run_attempt }}
+          path: |
+            target/surefire-reports/
+            target/testng-reports/
+            test-output/
+          if-no-files-found: warn
+          retention-days: 14

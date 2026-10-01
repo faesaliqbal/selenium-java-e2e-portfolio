@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Selenium E2E Portfolio Suite" parallel="none">
+    <listeners>
+        <listener class-name="com.faisal.selenium.utils.TestListener"/>
+    </listeners>
+    <test name="E2E Regression Tests">
+        <classes>
+            <class name="com.faisal.selenium.tests.FrameworkReliabilityTest"/>
+            <class name="com.faisal.selenium.tests.HomePageTest"/>
+            <class name="com.faisal.selenium.tests.LoginTest"/>
+            <class name="com.faisal.selenium.tests.InventoryTest"/>
+            <class name="com.faisal.selenium.tests.CartTest"/>
+            <class name="com.faisal.selenium.tests.CheckoutTest"/>
+        </classes>
+    </test>
+</suite>
